@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "997418929953",
+    "project_id": "meridian-5848c",
+    "storage_bucket": "meridian-5848c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997418929953:android:37f3d57546af702a7e7860",
+        "android_client_info": {
+          "package_name": "com.quiverr.meridian"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997418929953-2dfgvqpt5b9s55tnp39t75hdo2bj02p7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quiverr.meridian",
+            "certificate_hash": "2fa2e22f953f9f09e07207286405a90d74e6866a"
+          }
+        },
+        {
+          "client_id": "997418929953-0n59gvccg08d0khhmcgachrejrbdeivb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj5QrL1uoe9-BMMiPchVPP16AyGyI9h2U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997418929953-0n59gvccg08d0khhmcgachrejrbdeivb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
