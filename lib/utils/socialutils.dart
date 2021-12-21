@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:meridian/utils/databaseutils.dart';
+import 'package:meridian/utils/miscutils.dart';
 
 class SocialUtils {
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
@@ -52,5 +55,14 @@ class SocialUtils {
     }
 
     return user;
+  }
+
+  static Future<bool> updateDistance(String email, LatLng oldPos, LatLng newPos) async {
+    double currentDistance = await DatabaseUtils.getDistance(email);
+    double distanceCovered = MiscUtils.findDistance(newPos, oldPos);
+
+    await DatabaseUtils.setDistance(email, currentDistance + distanceCovered);
+
+    return true;
   }
 }

@@ -7,13 +7,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meridian/utils/databaseutils.dart';
 import 'package:meridian/utils/maputils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:bottom_drawer/bottom_drawer.dart';
+import 'package:meridian/utils/miscutils.dart';
 import 'package:meridian/utils/socialutils.dart';
 import 'package:meridian/utils/widgetutils.dart';
-import 'package:meridian/widgets/bottommenu.dart';
-import 'package:meridian/widgets/geocircle.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:meridian/widgets/stackedmessage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -84,18 +81,17 @@ class ContentPageState extends State<ContentPage> {
                           setState(() {});
                         }),
                     IconButton(
-                        icon: Icon(Icons.logout,
-                            color: ColorUtils.deepBlue),
+                        icon: Icon(Icons.logout, color: ColorUtils.deepBlue),
                         onPressed: () async {
                           await FirebaseAuth.instance.signOut();
                           await GoogleSignIn().signOut();
                           Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => LoginPage(
-                              title: 'Meridian',
+                            MaterialPageRoute(
+                              builder: (context) => LoginPage(
+                                title: 'Meridian',
+                              ),
                             ),
-                          ),
-                        );
+                          );
                         }),
                   ],
                 ),
@@ -108,7 +104,9 @@ class ContentPageState extends State<ContentPage> {
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.2,
                   width: MediaQuery.of(context).size.width,
-                  child: pageIndex == 0 ? WidgetUtils.locationSpheres(mapController) : WidgetUtils.followBar(followBarController, context),
+                  child: pageIndex == 0
+                      ? WidgetUtils.locationSpheres(mapController)
+                      : WidgetUtils.followBar(followBarController, context),
                 ),
               ),
             ],
@@ -117,11 +115,30 @@ class ContentPageState extends State<ContentPage> {
       ),
       body: Stack(
         children: <Widget>[
-          GoogleMap(
-            mapType: MapType.terrain,
-            initialCameraPosition: const CameraPosition(target: LatLng(0, 0)),
-            onMapCreated: (GoogleMapController controller) {
-              mapController.complete(controller);
+          FutureBuilder<Map<MarkerId, Marker>>(
+            future: MapUtils.getMarkers(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return GoogleMap(
+                  markers: Set<Marker>.of(
+                      (snapshot.data as Map<MarkerId, Marker>).values),
+                  mapType: MapType.terrain,
+                  initialCameraPosition: const CameraPosition(target: LatLng(0, 0)),
+                  onMapCreated: (GoogleMapController controller) {
+                    mapController.complete(controller);
+                  },
+                );
+              } else if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              } else {
+                return Center(
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
             },
           ),
         ],
@@ -129,10 +146,13 @@ class ContentPageState extends State<ContentPage> {
       floatingActionButton: FloatingActionButton(
         elevation: 0,
         onPressed: () async {
+          LatLng oldPos = MiscUtils.convertStringToLoc(await DatabaseUtils.getLocationFromEmail(FirebaseAuth.instance.currentUser!.email as String));
+          LatLng newPos = await MapUtils.getLoc();
           await MapUtils.animateLoc(mapController, await MapUtils.getLoc());
           await DatabaseUtils.setLocation(
               FirebaseAuth.instance.currentUser!.email as String,
-              await MapUtils.getLoc());
+          await MapUtils.getLoc());
+          await SocialUtils.updateDistance(FirebaseAuth.instance.currentUser!.email as String, oldPos, newPos);
         },
         backgroundColor: ColorUtils.deepBlue,
         child: const Icon(Icons.location_pin, color: Colors.white),

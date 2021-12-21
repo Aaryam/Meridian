@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meridian/utils/databaseutils.dart';
 import 'package:meridian/utils/maputils.dart';
 import 'package:meridian/utils/miscutils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class GeoCircle extends StatelessWidget {
   final String photoURL;
@@ -18,6 +19,9 @@ class GeoCircle extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15),
       child: GestureDetector(
+        onLongPress: () async {
+          DatabaseUtils.unfollowUser(FirebaseAuth.instance.currentUser!.email as String, email);
+        },
         onTap: () async {
           LatLng loc = MiscUtils.convertStringToLoc(await DatabaseUtils.getLocationFromEmail(email));
 
