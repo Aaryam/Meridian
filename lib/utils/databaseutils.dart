@@ -18,6 +18,7 @@ class DatabaseUtils {
         'status': 'Hi!',
         'photoURL': photoURL,
         'distance': '0.0',
+        'isParty': false,
       });
       await followUser(email, email);
       return true;
@@ -178,5 +179,27 @@ class DatabaseUtils {
     String distance = val['distance'];
     
     return double.parse(distance);
+  }
+
+  static Future<bool> isParty(String email) async {
+    DocumentReference docRef =
+        FirebaseFirestore.instance.collection('users').doc(email);
+
+    var val = await docRef.get();
+
+    bool isParty = val['isParty'];
+
+    return isParty;
+  }
+
+  static Future<bool> setIsParty(String email, bool isParty) async {
+    DocumentReference docRef =
+        FirebaseFirestore.instance.collection('users').doc(email);
+
+    await docRef.update({
+      'isParty': isParty,
+    });
+
+    return true;
   }
 }

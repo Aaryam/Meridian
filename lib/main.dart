@@ -123,7 +123,8 @@ class ContentPageState extends State<ContentPage> {
                   markers: Set<Marker>.of(
                       (snapshot.data as Map<MarkerId, Marker>).values),
                   mapType: MapType.terrain,
-                  initialCameraPosition: const CameraPosition(target: LatLng(0, 0)),
+                  initialCameraPosition:
+                      const CameraPosition(target: LatLng(0, 0)),
                   onMapCreated: (GoogleMapController controller) {
                     mapController.complete(controller);
                   },
@@ -143,20 +144,37 @@ class ContentPageState extends State<ContentPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        elevation: 0,
-        onPressed: () async {
-          LatLng oldPos = MiscUtils.convertStringToLoc(await DatabaseUtils.getLocationFromEmail(FirebaseAuth.instance.currentUser!.email as String));
+      floatingActionButton: GestureDetector(
+        onLongPress: () async {
+          String email = FirebaseAuth.instance.currentUser!.email as String;
+          await DatabaseUtils.setIsParty(email, true);
+        },
+        child: FloatingActionButton(
+          elevation: 0,
+          onPressed: () async {
+          String email = FirebaseAuth.instance.currentUser!.email as String;
+          LatLng oldPos = MiscUtils.convertStringToLoc(
+              await DatabaseUtils.getLocationFromEmail(
+                  email));
           LatLng newPos = await MapUtils.getLoc();
           await MapUtils.animateLoc(mapController, await MapUtils.getLoc());
           await DatabaseUtils.setLocation(
-              FirebaseAuth.instance.currentUser!.email as String,
-          await MapUtils.getLoc());
-          await SocialUtils.updateDistance(FirebaseAuth.instance.currentUser!.email as String, oldPos, newPos);
-        },
-        backgroundColor: ColorUtils.deepBlue,
-        child: const Icon(Icons.location_pin, color: Colors.white),
+              email,
+              await MapUtils.getLoc());
+          await SocialUtils.updateDistance(
+              email,
+              oldPos,
+              newPos);
+          await DatabaseUtils.setIsParty(email, false);
+          },
+          backgroundColor: ColorUtils.deepBlue,
+          child: const Icon(Icons.location_pin, color: Colors.white),
+        ),
       ),
     );
   }
 }
+
+/*
+
+*/

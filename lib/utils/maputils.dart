@@ -25,10 +25,7 @@ class MapUtils {
         CameraUpdate.newCameraPosition(locToCameraPos(loc, 20.0)));
   }
 
-  static Future<Map<MarkerId, Marker>> getMarkers() async {
-
-    BitmapDescriptor icon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(48,48)), 'assets/location_pin.png');
-
+  static Future<Map<MarkerId, Marker>> getMarkers() async {    
     Map<MarkerId, Marker> finalValue = Map<MarkerId, Marker>();
     List<String> following = await DatabaseUtils.getFollowingList(
         FirebaseAuth.instance.currentUser!.email as String);
@@ -40,6 +37,15 @@ class MapUtils {
       String statusText = '$status - $distance ' 'km';
 
       MarkerId markerId = MarkerId(MiscUtils.generateRandomID(10));
+      BitmapDescriptor icon;
+
+      if (await DatabaseUtils.isParty(f)) {
+        icon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose);
+      }
+      else {
+        icon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(48,48)), 'assets/location_pin.png');
+      }
+
       Marker marker = Marker(
         markerId: markerId,
         position: MiscUtils.convertStringToLoc(await DatabaseUtils.getLocationFromEmail(f)),
