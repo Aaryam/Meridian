@@ -15,10 +15,13 @@ A an app to share your location.
 - Add distance leaderboard
   - Track distance ✅
   - Store distance in a database ✅
-  - Also store distance on a database leaderboard
-  - Sort database according to distance every 7 days
+  - Also store distance on a database leaderboard ✅
   - Make badges and stuff to reward users
-  - Call it Meridian Recap
+
+- Meridian Recap
+  - Store important locations in cache
+  - Decide important locations by including all parties, and largest distances travelled (cap at 10)
+  - At the click of a button, a recap of the last month's locations are shown
 
 - Prepare for beta
   - Fix any bugs you find after this

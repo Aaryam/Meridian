@@ -38,7 +38,14 @@ class LeaderboardPageState extends State<LeaderboardPage> {
           },
         ),
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
+      body: RefreshIndicator(
+        onRefresh: () async {
+
+          // refresh page by rebuilding state with setState
+
+          setState(() {});
+        },
+        child: FutureBuilder<List<Map<String, dynamic>>>(
         future: SocialUtils.getLeaderboards(),
         builder: (context, snapshot) {
           if (snapshot.hasData &&
@@ -75,6 +82,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
             );
           }
         },
+      ),
       ),
     );
   }
