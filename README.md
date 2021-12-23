@@ -4,17 +4,17 @@ A an app to share your location.
 
 ## Roadmap
 
-- Make basic MVP
-  - Location sharing
-  - Basic party integration
-  - Viewing location
-  - Sharing statuses
-  - Distance tracking
-  - Store everything on firestore
+- Make basic MVP ✅
+  - Location sharing ✅
+  - Basic party integration ✅
+  - Viewing location ✅
+  - Sharing statuses ✅
+  - Distance tracking ✅
+  - Store everything on firestore ✅
 
 - Add distance leaderboard
-  - Track distance
-  - Store distance in a database
+  - Track distance ✅
+  - Store distance in a database ✅
   - Also store distance on a database leaderboard
   - Sort database according to distance every 7 days
   - Make badges and stuff to reward users
