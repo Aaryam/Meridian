@@ -137,6 +137,10 @@ class DatabaseUtils {
         .exists;
   }
 
+  static Future<bool> docExists(String collection, String doc) async {
+    return (await FirebaseFirestore.instance.collection(collection).doc(doc).get()).exists;
+  }
+
   static Future<bool> setStatus(String email, String status) async {
     DocumentReference docRef =
         FirebaseFirestore.instance.collection('users').doc(email);

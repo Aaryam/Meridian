@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:meridian/pages/leaderboardpage.dart';
 import 'package:meridian/pages/loginpage.dart';
 import 'package:meridian/pages/startpage.dart';
 import 'package:meridian/utils/colorutils.dart';
@@ -63,16 +64,12 @@ class ContentPageState extends State<ContentPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     IconButton(
-                        icon: Icon(Icons.home, color: ColorUtils.deepBlue),
-                        onPressed: () {}),
-                    IconButton(
                         icon: Icon(Icons.search, color: ColorUtils.deepBlue),
                         onPressed: () {
                           openSize = openSize == 5 ? 1 : 5;
                           pageIndex = 1;
                           setState(() {});
                         }),
-                    SizedBox(width: 40), // The dummy child
                     IconButton(
                         icon: Icon(Icons.person, color: ColorUtils.deepBlue),
                         onPressed: () {
@@ -80,8 +77,20 @@ class ContentPageState extends State<ContentPage> {
                           pageIndex = 0;
                           setState(() {});
                         }),
+                    SizedBox(width: 40), // The dummy child
                     IconButton(
-                        icon: Icon(Icons.logout, color: ColorUtils.deepBlue),
+                        icon: Icon(Icons.leaderboard, color: ColorUtils.deepBlue),
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => LeaderboardPage(
+                                title: 'Meridian',
+                              ),
+                            ),
+                          );
+                        }),
+                    IconButton(
+                        icon: Icon(Icons.settings, color: ColorUtils.deepBlue),
                         onPressed: () async {
                           await FirebaseAuth.instance.signOut();
                           await GoogleSignIn().signOut();
@@ -145,27 +154,18 @@ class ContentPageState extends State<ContentPage> {
         ],
       ),
       floatingActionButton: GestureDetector(
-        onLongPress: () async {
-          String email = FirebaseAuth.instance.currentUser!.email as String;
-          await DatabaseUtils.setIsParty(email, true);
-        },
         child: FloatingActionButton(
           elevation: 0,
           onPressed: () async {
-          String email = FirebaseAuth.instance.currentUser!.email as String;
-          LatLng oldPos = MiscUtils.convertStringToLoc(
-              await DatabaseUtils.getLocationFromEmail(
-                  email));
-          LatLng newPos = await MapUtils.getLoc();
-          await MapUtils.animateLoc(mapController, await MapUtils.getLoc());
-          await DatabaseUtils.setLocation(
-              email,
-              await MapUtils.getLoc());
-          await SocialUtils.updateDistance(
-              email,
-              oldPos,
-              newPos);
-          await DatabaseUtils.setIsParty(email, false);
+            String email = FirebaseAuth.instance.currentUser!.email as String;
+            LatLng oldPos = MiscUtils.convertStringToLoc(
+                await DatabaseUtils.getLocationFromEmail(email));
+            LatLng newPos = await MapUtils.getLoc();
+            await MapUtils.animateLoc(mapController, await MapUtils.getLoc());
+            await DatabaseUtils.setLocation(email, await MapUtils.getLoc());
+            await SocialUtils.updateDistance(email, oldPos, newPos);
+            //await DatabaseUtils.setIsParty(email, false);
+            await SocialUtils.addLeaderboard(email);
           },
           backgroundColor: ColorUtils.deepBlue,
           child: const Icon(Icons.location_pin, color: Colors.white),
