@@ -89,7 +89,7 @@ class SocialUtils {
 
     docRef.doc(email).set({
       'email': email,
-      'distance': distance,
+      'distance': distance.toString(),
     });
 
     return true;

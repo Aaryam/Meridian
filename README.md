@@ -1,8 +1,8 @@
-# meridian
+# trident
 
 A an app to share your location.
 
-## Roadmap
+## Roadmap for Beta
 
 - Make basic MVP ✅
   - Location sharing ✅
@@ -16,20 +16,26 @@ A an app to share your location.
   - Track distance ✅
   - Store distance in a database ✅
   - Also store distance on a database leaderboard ✅
-  - Make badges and stuff to reward users
-
-- Meridian Recap
-  - Store important locations in cache
-  - Decide important locations by including all parties, and largest distances travelled (cap at 10)
-  - At the click of a button, a recap of the last month's locations are shown
 
 - Prepare for beta
+  - Change name & icon ✅
+  - Refine UI and animations ✅
   - Fix any bugs you find after this
   - Run quick alpha tests
-  - Refine UI and animations
 
 - Release for beta
+  - Put on play store
   - Post story of being #1 in the world
   - Tell people about it
   - Possibly make a quick tutorial of sorts
-  - Change name & icon
+
+## After Beta
+
+- See if product is popular
+  - Fix bugs
+  - Add features people want
+
+- Trident Recap
+  - Store important locations in cache
+  - Decide important locations by including all parties, and largest distances travelled (cap at 10)
+  - At the click of a button, a recap of the last month's locations are shown

@@ -51,73 +51,42 @@ class ContentPageState extends State<ContentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        height: 250 / openSize,
-        child: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          child: Column(
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        child: Container(
+          height: 50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                height: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    IconButton(
-                        icon: Icon(Icons.search, color: ColorUtils.deepBlue),
-                        onPressed: () {
-                          openSize = openSize == 5 ? 1 : 5;
-                          pageIndex = 1;
-                          setState(() {});
-                        }),
-                    IconButton(
-                        icon: Icon(Icons.person, color: ColorUtils.deepBlue),
-                        onPressed: () {
-                          openSize = openSize == 5 ? 1 : 5;
-                          pageIndex = 0;
-                          setState(() {});
-                        }),
-                    SizedBox(width: 40), // The dummy child
-                    IconButton(
-                        icon: Icon(Icons.leaderboard, color: ColorUtils.deepBlue),
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => LeaderboardPage(
-                                title: 'Meridian',
-                              ),
-                            ),
-                          );
-                        }),
-                    IconButton(
-                        icon: Icon(Icons.settings, color: ColorUtils.deepBlue),
-                        onPressed: () async {
-                          await FirebaseAuth.instance.signOut();
-                          await GoogleSignIn().signOut();
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => LoginPage(
-                                title: 'Meridian',
-                              ),
-                            ),
-                          );
-                        }),
-                  ],
-                ),
-              ),
-              AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                color: Colors.white,
-                height: openSize == 5 ? 0 : 200,
-                width: MediaQuery.of(context).size.width,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  width: MediaQuery.of(context).size.width,
-                  child: pageIndex == 0
-                      ? WidgetUtils.locationSpheres(mapController)
-                      : WidgetUtils.followBar(followBarController, context),
-                ),
-              ),
+              IconButton(
+                  icon: Icon(Icons.search, color: ColorUtils.deepBlue),
+                  onPressed: () {
+                    WidgetUtils.viewFollowSheet(context, followBarController);
+                  }),
+              IconButton(
+                  icon: Icon(Icons.person, color: ColorUtils.deepBlue),
+                  onPressed: () {
+                    WidgetUtils.viewFriends(context, mapController, FirebaseAuth.instance.currentUser!.email);
+                  }),
+              SizedBox(width: 40), // The dummy child
+              IconButton(
+                  icon: Icon(Icons.leaderboard, color: ColorUtils.deepBlue),
+                  onPressed: () {
+                    WidgetUtils.viewLeaderboard(context, mapController);
+                  }),
+              IconButton(
+                  icon: Icon(Icons.settings, color: ColorUtils.deepBlue),
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+                    await GoogleSignIn().signOut();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => LoginPage(
+                          title: 'Meridian',
+                        ),
+                      ),
+                    );
+                  }),
             ],
           ),
         ),
